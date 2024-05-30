@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const NAMES = [
   'Анна', 'Сергей', 'Иван', 'Елена', 'Дмитрий', 'Ольга', 'Максим', 'Алексей', 'Мария', 'Павел', 'Виктор', 'Екатерина', 'Николай', 'Юлия', 'Михаил', 'Игорь'
 ];
@@ -48,5 +49,4 @@ const createPhoto = (id) => {
 const generatePhotos = (count) => Array.from({ length: count }, (_, index) => createPhoto(index + 1));
 
 const photos = generatePhotos(25);
-
 console.log(photos);
