@@ -37,7 +37,9 @@ const createPhoto = (id) => {
     comments: comments
   };
 
+
 };
+
 
 
 const generatePhotos = (count) => Array.from({ length: count }, (_, index) => createPhoto(index + 1));
