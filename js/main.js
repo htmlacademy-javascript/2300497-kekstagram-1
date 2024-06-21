@@ -1,3 +1,4 @@
+import { renderPictures } from './template-photos.js';
+import { photos } from './data.js';
 
-import { photos } from "./data.js";
-console.log(photos);
+renderPictures(photos);
