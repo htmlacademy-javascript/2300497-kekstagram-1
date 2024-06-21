@@ -18,7 +18,7 @@ const renderTemplate = ({ url, comments, likes }) => {
 const renderPictures = (photos) => {
   const pictureListFragment = document.createDocumentFragment();
 
-  photos.forEach(photo => {
+  photos.forEach((photo) => {
     const pictureCard = renderTemplate(photo);
     pictureListFragment.appendChild(pictureCard);
   });
