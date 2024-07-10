@@ -11,7 +11,7 @@ const commentsLoader = bigPicture.querySelector('.comments-loader');
 const socialComments = bigPicture.querySelector('.social__comments');
 
 let isBigPictureOpen = false;
-/*-------------------- Комментарии -------------*/
+/*------------- Комментарии -------------*/
 
 const renderCommentsList = (comments) => {
   const commentFragment = document.createDocumentFragment();
