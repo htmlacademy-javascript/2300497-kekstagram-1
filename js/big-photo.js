@@ -14,7 +14,7 @@ let isBigPictureOpen = false;
 /*-------------------- Комментарии -------------*/
 
 const renderCommentsList = (comments) => {
-  const fragment = document.createDocumentFragment();
+  const commentFragment = document.createDocumentFragment();
   comments.forEach(({ avatar, message, name }) => {
     const commentElement = document.createElement('li');
     commentElement.classList.add('social__comment');
@@ -32,9 +32,9 @@ const renderCommentsList = (comments) => {
 
     commentElement.appendChild(imgElement);
     commentElement.appendChild(textElement);
-    fragment.appendChild(commentElement);
+    commentFragment.appendChild(commentElement);
   });
-  socialComments.appendChild(fragment);
+  socialComments.appendChild(commentFragment);
 };
 
 const clearCommentsList = () => {
