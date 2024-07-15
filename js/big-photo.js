@@ -44,7 +44,7 @@ const clearCommentsList = () => {
 
 
 /*------------Big-Picture---------------*/
-const onDocumentKeydown = (evt) => {
+function onDocumentKeydown(evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     closeBigPicture();
@@ -52,7 +52,7 @@ const onDocumentKeydown = (evt) => {
   if (isEnterKey(evt) && isBigPictureOpen) {
     evt.preventDefault();
   }
-};
+}
 
 const updateBigPictureContent = ({ url, description, likes, comments }) => {
   bigPictureImg.src = url;
@@ -80,8 +80,6 @@ const closeBigPicture = () => {
   document.removeEventListener('keydown', onDocumentKeydown);
   isBigPictureOpen = false;
 };
-
-
 
 bigPictureCancel.addEventListener('click', closeBigPicture);
 
