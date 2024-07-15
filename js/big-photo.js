@@ -63,7 +63,7 @@ const updateBigPictureContent = ({ url, description, likes, comments }) => {
   renderCommentsList(comments);
 };
 
-const openBigPicture = (cardData) => {
+function openBigPicture(cardData){
   updateBigPictureContent(cardData);
   bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
@@ -73,7 +73,7 @@ const openBigPicture = (cardData) => {
   isBigPictureOpen = true;
 };
 
-const closeBigPicture = () => {
+function closeBigPicture() {
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
   clearCommentsList();
