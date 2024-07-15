@@ -12,7 +12,7 @@ const commentsLoader = bigPicture.querySelector('.comments-loader');
 let isBigPictureOpen = false;
 let currentPhoto = null;
 
-const onDocumentKeydown = (evt) => {
+function onDocumentKeydown(evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     closeBigPicture();
@@ -20,9 +20,9 @@ const onDocumentKeydown = (evt) => {
   if (isEnterKey(evt) && isBigPictureOpen) {
     evt.preventDefault();
   }
-};
+}
 
-const openBigPicture = (photoData) => {
+function openBigPicture(photoData) {
   bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
 
@@ -39,16 +39,16 @@ const openBigPicture = (photoData) => {
   document.addEventListener('keydown', onDocumentKeydown);
 
   currentPhoto = photoData;
-};
+}
 
-const closeBigPicture = () => {
+function closeBigPicture() {
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
 
   isBigPictureOpen = false;
   document.removeEventListener('keydown', onDocumentKeydown);
   currentPhoto = null;
-};
+}
 
 bigPictureCancel.addEventListener('click', closeBigPicture);
 
