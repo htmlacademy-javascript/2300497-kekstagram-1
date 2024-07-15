@@ -1,4 +1,4 @@
-import { renderPictures } from './template-photos.js';
+import { renderGallery } from './big-photo.js';
 import { photos } from './data.js';
 
-renderPictures(photos);
+renderGallery(photos);
