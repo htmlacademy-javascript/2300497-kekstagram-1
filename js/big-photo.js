@@ -1,4 +1,5 @@
 import { renderPictures } from './template-photos.js';
+import { isEnterKey, isEscapeKey } from './keyboard-keys.js';
 
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureImg = bigPicture.querySelector('.big-picture__img img');
@@ -41,23 +42,8 @@ const clearCommentsList = () => {
   socialComments.innerHTML = '';
 };
 
-/*------------keyboard-keys---------------*/
-
-const isEscapeKey = (evt) => evt.key === 'Escape';
-const isEnterKey = (evt) => evt.key === 'Enter';
-
 
 /*------------Big-Picture---------------*/
-
-const onDocumentKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    closeBigPicture();
-  }
-  if (isEnterKey(evt) && isBigPictureOpen) {
-    evt.preventDefault();
-  }
-};
 
 const updateBigPictureContent = ({ url, description, likes, comments }) => {
   bigPictureImg.src = url;
@@ -84,6 +70,16 @@ const closeBigPicture = () => {
   clearCommentsList();
   document.removeEventListener('keydown', onDocumentKeydown);
   isBigPictureOpen = false;
+};
+
+const onDocumentKeydown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closeBigPicture();
+  }
+  if (isEnterKey(evt) && isBigPictureOpen) {
+    evt.preventDefault();
+  }
 };
 
 bigPictureCancel.addEventListener('click', closeBigPicture);
