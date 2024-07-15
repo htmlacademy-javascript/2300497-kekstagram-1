@@ -71,7 +71,7 @@ function openBigPicture(cardData){
   commentsLoader.classList.add('hidden');
   document.addEventListener('keydown', onDocumentKeydown);
   isBigPictureOpen = true;
-};
+}
 
 function closeBigPicture() {
   bigPicture.classList.add('hidden');
@@ -79,7 +79,7 @@ function closeBigPicture() {
   clearCommentsList();
   document.removeEventListener('keydown', onDocumentKeydown);
   isBigPictureOpen = false;
-};
+}
 
 bigPictureCancel.addEventListener('click', closeBigPicture);
 
