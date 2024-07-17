@@ -16,7 +16,10 @@
     "eslint-config-htmlacademy": "9.0.0"
   },
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "faker": "^6.6.6"
+  },
   "scripts": {
     "start": "browser-sync start --server --no-ui --files \"js/**/*.js\"",
     "lint": "eslint js/"
