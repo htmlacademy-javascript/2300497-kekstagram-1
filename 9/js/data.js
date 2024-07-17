@@ -23,7 +23,7 @@ const createComment = (id) => ({
   avatar: `img/avatar-${getRandomInteger(1, 6)}.svg`,
   message: `${getRandomArrayElement(COMMENTS)}`,
   name: `${getRandomArrayElement(NAMES)}`
-    });
+});
 
 const createPhoto = (id) => {
   const numberOfComments = getRandomInteger(1, 1000);
