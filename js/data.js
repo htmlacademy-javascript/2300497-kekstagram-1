@@ -26,14 +26,14 @@ const createComment = (id) => ({
 });
 
 const createPhoto = (id) => {
-  const numberOfComments = getRandomInteger(1, 5);
+  const numberOfComments = getRandomInteger(1, 1000);
   const comments = Array.from({ length: numberOfComments }, (_, index) => createComment(id * 10 + index + 1));
 
   return {
     id: id,
     url: `photos/${id}.jpg`,
     description: getRandomArrayElement(DESCRIPTIONS),
-    likes: getRandomInteger(15, 200),
+    likes: getRandomInteger(15, 20000),
     comments: comments
   };
 

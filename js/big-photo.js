@@ -1,4 +1,5 @@
-import { renderPictures } from './template-photos.js';
+import { isEscapeKey, isEnterKey } from './keyboard-keys.js';
+import { clearCommentsList, renderComments, resetCommentsShown } from './comments.js';
 
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureImg = bigPicture.querySelector('.big-picture__img img');
@@ -6,76 +7,48 @@ const likesCount = bigPicture.querySelector('.likes-count');
 const commentsCount = bigPicture.querySelector('.comments-count');
 const socialCaption = bigPicture.querySelector('.social__caption');
 const bigPictureCancel = bigPicture.querySelector('#picture-cancel');
-const commentCountBlock = bigPicture.querySelector('.social__comment-count');
 const commentsLoader = bigPicture.querySelector('.comments-loader');
-const socialComments = bigPicture.querySelector('.social__comments');
 
 let isBigPictureOpen = false;
-/*-------------------- Комментарии -------------*/
+let currentPhoto = null;
 
-const renderCommentsList = (comments) => {
-  const commentFragment = document.createDocumentFragment();
-  comments.forEach(({ avatar, message, name }) => {
-    const commentElement = document.createElement('li');
-    commentElement.classList.add('social__comment');
+function onDocumentKeydown(evt) {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closeBigPicture();
+  }
+  if (isEnterKey(evt) && isBigPictureOpen) {
+    evt.preventDefault();
+  }
+}
 
-    const imgElement = document.createElement('img');
-    imgElement.classList.add('social__picture');
-    imgElement.src = avatar;
-    imgElement.alt = name;
-    imgElement.width = 35;
-    imgElement.height = 35;
-
-    const textElement = document.createElement('p');
-    textElement.classList.add('social__text');
-    textElement.textContent = message;
-
-    commentElement.appendChild(imgElement);
-    commentElement.appendChild(textElement);
-    commentFragment.appendChild(commentElement);
-  });
-  socialComments.appendChild(commentFragment);
-};
-
-const clearCommentsList = () => {
-  socialComments.innerHTML = '';
-};
-
-/*------------keyboard-keys---------------*/
-
-const isEscapeKey = (evt) => evt.key === 'Escape';
-const isEnterKey = (evt) => evt.key === 'Enter';
-
-
-/*------------Big-Picture---------------*/
-
-
-const updateBigPictureContent = ({ url, description, likes, comments }) => {
-  bigPictureImg.src = url;
-  bigPictureImg.alt = description;
-  likesCount.textContent = likes;
-  commentsCount.textContent = comments.length;
-  socialCaption.textContent = description;
-  renderCommentsList(comments);
-};
-
-const openBigPicture = (cardData) => {
-  updateBigPictureContent(cardData);
+function openBigPicture(photoData) {
   bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  commentCountBlock.classList.add('hidden');
-  commentsLoader.classList.add('hidden');
-  document.addEventListener('keydown', onDocumentKeydown);
-  isBigPictureOpen = true;
-};
 
-const closeBigPicture = () => {
+  bigPictureImg.src = photoData.url;
+  likesCount.textContent = photoData.likes;
+  commentsCount.textContent = photoData.comments.length;
+  socialCaption.textContent = photoData.description;
+
+  clearCommentsList();
+  resetCommentsShown();
+  renderComments(photoData.comments);
+
+  isBigPictureOpen = true;
+  document.addEventListener('keydown', onDocumentKeydown);
+
+  currentPhoto = photoData;
+}
+
+function closeBigPicture() {
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  clearCommentsList();
-  document.removeEventListener('keydown', onDocumentKeydown);
+
   isBigPictureOpen = false;
-};
+  document.removeEventListener('keydown', onDocumentKeydown);
+  currentPhoto = null;
+}
 
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -89,29 +62,10 @@ const onDocumentKeydown = (evt) => {
 
 bigPictureCancel.addEventListener('click', closeBigPicture);
 
+commentsLoader.addEventListener('click', () => {
+  if (currentPhoto) {
+    renderComments(currentPhoto.comments);
+  }
+});
 
-/*-------------------- нажатие на фото -------------*/
-
-const renderGallery = (photos) => {
-  renderPictures(photos);
-
-  const photosContainer = document.querySelector('.pictures');
-
-  const onCardsClick = (evt) => {
-    const photoElement = evt.target.closest('.picture');
-
-    if (!photoElement) {
-      return;
-    }
-
-    const id = parseInt(photoElement.dataset.id, 10);
-    const cardData = photos.find((photo) => photo.id === id);
-    if (cardData) {
-      openBigPicture(cardData);
-    }
-  };
-
-  photosContainer.addEventListener('click', onCardsClick);
-};
-
-export { renderGallery };
+export { openBigPicture, closeBigPicture };
