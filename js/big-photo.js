@@ -50,16 +50,6 @@ function closeBigPicture() {
   currentPhoto = null;
 }
 
-const onDocumentKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    closeBigPicture();
-  }
-  if (isEnterKey(evt) && isBigPictureOpen) {
-    evt.preventDefault();
-  }
-};
-
 bigPictureCancel.addEventListener('click', closeBigPicture);
 
 commentsLoader.addEventListener('click', () => {
