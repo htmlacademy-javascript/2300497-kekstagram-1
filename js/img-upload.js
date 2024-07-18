@@ -8,6 +8,8 @@ const scaleSmaller = document.querySelector('.scale__control--smaller');
 const scaleValue = document.querySelector('.scale__control--value');
 const hashtagsField = form.querySelector('#hashtags');
 const descriptionField = form.querySelector('#description');
+const imgPreview = document.querySelector('.img-upload__preview img');
+const effectsRadio = document.querySelectorAll('.effects__radio');
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 const SCALE_STEP = 25;
@@ -83,6 +85,16 @@ function smallScale (){
 scaleBigger.addEventListener('click', bigScale);
 scaleSmaller.addEventListener('click', smallScale);
 
+//реализация фильтров
+
+effectsRadio.forEach((radio) => {
+  radio.addEventListener('change', (evt) => {
+    imgPreview.className = 'default-preview-img';
+    if (evt.target.value !== 'none') {
+      imgPreview.classList.add(`effects__preview--${evt.target.value}`);
+    }
+  });
+});
 
 // Реализация валидации черехз пристин
 
