@@ -108,7 +108,7 @@ const pristine = new Pristine(form, {
 });
 
 function validateHashTag(value) {
-  if (value === '') return true;
+  if (value === '') {return true;}
 
   const hashtagPattern = /^#[a-zа-яё0-9]{1,19}$/i;
   const hashtags = value.trim().split(/\s+/);
