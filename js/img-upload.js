@@ -96,7 +96,7 @@ effectsRadio.forEach((radio) => {
   });
 });
 
-// Реализация валидации черехз пристин
+// Реализация валидации через пристин
 
 const pristine = new Pristine(form, {
   classTo: 'form__item',
