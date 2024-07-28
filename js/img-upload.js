@@ -1,17 +1,18 @@
-const closeButton = document.querySelector('.img-upload__cancel');
+import { isEscapeKey } from "./keyboard-keys";
+
 const fileInput = document.querySelector('#upload-file');
 const previewImg = document.querySelector('.default-preview-img');
-const overlay = document.querySelector('.img-upload__overlay');
 const form = document.querySelector('#upload-select-image');
-const scaleBigger = document.querySelector('.scale__control--bigger');
-const scaleSmaller = document.querySelector('.scale__control--smaller');
-const scaleValue = document.querySelector('.scale__control--value');
+const overlay = document.querySelector('.img-upload__overlay');
+const closeButton = overlay.querySelector('.img-upload__cancel');
+const scaleBigger = overlay.querySelector('.scale__control--bigger');
+const scaleSmaller = overlay.querySelector('.scale__control--smaller');
+const scaleValue = overlay.querySelector('.scale__control--value');
 const hashtagsField = form.querySelector('#hashtags');
 const descriptionField = form.querySelector('#description');
-const imgPreview = document.querySelector('.img-upload__preview img');
-const effectsRadio = document.querySelectorAll('.effects__radio');
+const imgPreview = overlay.querySelector('.img-upload__preview img');
+const effectsContainer = overlay.querySelector('.effects__list');
 
-const isEscapeKey = (evt) => evt.key === 'Escape';
 const SCALE_STEP = 25;
 const MIN_SCALE = 25;
 const MAX_SCALE = 100;
@@ -29,6 +30,7 @@ const fileLoader = () => {
       overlay.classList.remove('hidden');
       document.body.classList.add('modal-open');
       document.addEventListener('keydown', onDocumentKeydown);
+      fileInput.value = '';
     };
     reader.readAsDataURL(file);
   }
@@ -43,10 +45,7 @@ const closeOverlay = () => {
   document.removeEventListener('keydown', onDocumentKeydown);
 };
 
-fileInput.addEventListener('change', () => {
-  fileLoader();
-  fileInput.value = '';
-});
+fileInput.addEventListener('change', fileLoader);
 closeButton.addEventListener('click', closeOverlay);
 
 const onDocumentKeydown = (evt) => {
@@ -87,13 +86,13 @@ scaleSmaller.addEventListener('click', smallScale);
 
 //реализация фильтров
 
-effectsRadio.forEach((radio) => {
-  radio.addEventListener('change', (evt) => {
+effectsContainer.addEventListener('change', (evt) => {
+  if (evt.target.classList.contains('effects__radio')) {
     imgPreview.className = 'default-preview-img';
     if (evt.target.value !== 'none') {
       imgPreview.classList.add(`effects__preview--${evt.target.value}`);
     }
-  });
+  }
 });
 
 // Реализация валидации через пристин
@@ -108,7 +107,7 @@ const pristine = new Pristine(form, {
 });
 
 function validateHashTag(value) {
-  if (value === '') return true;
+  if (value === '') {return true;}
 
   const hashtagPattern = /^#[a-zа-яё0-9]{1,19}$/i;
   const hashtags = value.trim().split(/\s+/);
@@ -127,17 +126,21 @@ function validateText (value) {
 pristine.addValidator(hashtagsField, validateHashTag, 'неверно введенный хэш-тег');
 pristine.addValidator(descriptionField, validateText, 'До 140 символов');
 
-function updateFieldBorder(field) {
-  if (pristine.validate(field)) {
-    field.style.borderColor = '';
-  } else {
-    field.style.borderColor = 'red';
-  }
+field.style.borderColor = pristine.validate(field) ? ' ' : 'red';
+
+function onHashtagsFieldInput() {
+  updateFieldBorder(hashtagsField)
 }
 
-hashtagsField.addEventListener('input', () => updateFieldBorder(hashtagsField));
-descriptionField.addEventListener('input', () => updateFieldBorder(descriptionField));
+hashtagsField.addEventListener('input', onHashtagsFieldInput);
+hashtagsField.removeEventListener('input', onHashtagsFieldInput);
 
+function onDescriptionFieldInput() {
+  updateFieldBorder(descriptionField)
+}
+
+descriptionField.addEventListener('input', onDescriptionFieldInput);
+descriptionField.removeEventListener('input', onDescriptionFieldInput);
 
 form.addEventListener('submit', (evt) => {
   const valid = pristine.validate();
@@ -145,3 +148,5 @@ form.addEventListener('submit', (evt) => {
     evt.preventDefault();
   }
 });
+
+export {fileLoader, fileInput};
