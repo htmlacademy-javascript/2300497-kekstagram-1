@@ -21,11 +21,11 @@ const MAX_HASHTAGS = 5;
 
 // Функция для загрузки файла и установки его в preview
 
-const fileLoader = () => {
+const fileLoader = function() {
   const file = fileInput.files[0];
   if (file) {
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = function(e) {
       previewImg.src = e.target.result;
       overlay.classList.remove('hidden');
       document.body.classList.add('modal-open');
@@ -37,7 +37,7 @@ const fileLoader = () => {
 };
 
 // Функция для закрытия оверлея
-const closeOverlay = () => {
+const closeOverlay = function() {
   overlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   fileInput.value = '';
@@ -48,7 +48,7 @@ const closeOverlay = () => {
 fileInput.addEventListener('change', fileLoader);
 closeButton.addEventListener('click', closeOverlay);
 
-const onDocumentKeydown = (evt) => {
+const onDocumentKeydown = function (evt) {
   if (isEscapeKey(evt)) {
     if (document.activeElement !== hashtagsField && document.activeElement !== descriptionField) {
       evt.preventDefault();
@@ -131,7 +131,7 @@ const validateField = (field) => {
   field.style.borderColor = isValid ? '' : 'red';
 };
 function onHashtagsFieldInput() {
-  updateFieldBorder(hashtagsField)
+  updateFieldBorder(hashtagsField);
 }
 
 hashtagsField.addEventListener('input', onHashtagsFieldInput);
