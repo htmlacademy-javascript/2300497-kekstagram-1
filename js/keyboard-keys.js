@@ -6,4 +6,5 @@ const isEscapeKey = function(evt) {
     return evt.key === 'Enter';
   };
   
-  export { isEscapeKey, isEnterKey }; 
+  export { isEscapeKey, isEnterKey };
+  
