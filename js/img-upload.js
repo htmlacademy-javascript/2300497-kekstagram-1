@@ -1,4 +1,4 @@
-import { isEscapeKey } from "./keyboard-keys";
+import { isEscapeKey } from "./keyboard-keys.js";
 
 const fileInput = document.querySelector('#upload-file');
 const previewImg = document.querySelector('.default-preview-img');
@@ -126,8 +126,10 @@ function validateText (value) {
 pristine.addValidator(hashtagsField, validateHashTag, 'неверно введенный хэш-тег');
 pristine.addValidator(descriptionField, validateText, 'До 140 символов');
 
-field.style.borderColor = pristine.validate(field) ? ' ' : 'red';
-
+const validateField = (field) => {
+  const isValid = pristine.validate(field);
+  field.style.borderColor = isValid ? '' : 'red';
+};
 function onHashtagsFieldInput() {
   updateFieldBorder(hashtagsField)
 }
