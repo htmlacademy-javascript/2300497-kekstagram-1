@@ -177,7 +177,7 @@ sliderElement.noUiSlider.on('update', (values, handle) => {
 });
 
 // Функция для сброса эффектов на "Оригинал"
-const resetEffects = () => {
+const resetEffects = function () {
   imgPreview.className = 'effects__preview--none';
   imgPreview.style.filter = '';
   effectLevel.classList.add('hidden');
