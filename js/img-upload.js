@@ -51,7 +51,6 @@ const fileLoader = function() {
       document.body.classList.add('modal-open');
       document.addEventListener('keydown', onDocumentKeydown);
       resetEffects();
-      fileInput.value = '';
     };
     reader.readAsDataURL(file);
   }
@@ -236,11 +235,27 @@ function onDescriptionFieldInput() {
 
 descriptionField.addEventListener('input', onDescriptionFieldInput);
 
-form.addEventListener('submit', (evt) => {
-  const valid = pristine.validate();
-  if (!valid) {
+const setUserFormSubmit = (onSuccess) => {
+  form.addEventListener('submit', (evt) => {
     evt.preventDefault();
-  }
-});
 
-export { fileLoader, fileInput };
+    const valid = pristine.validate();
+    if (valid) {
+      const formData = new FormData(evt.target);
+
+      fetch ('https://28.javascript.htmlacademy.pro/kekstagram',
+      {
+        method: 'POST',
+        body: formData,
+      }).then(() => onSuccess()).then(() => evt.target.reset()).catch((err) => {
+        console.log('Error: ', err);
+      });
+      console.log(formData);
+      console.log('good');
+    }
+    else {
+      console.log('bad');
+    }
+  });
+};
+export {setUserFormSubmit, closeOverlay };
