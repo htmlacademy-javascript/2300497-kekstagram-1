@@ -1,9 +1,7 @@
-import { renderPictures } from './template-photos.js';
 import { openBigPicture } from './big-photo.js';
 let currentPhoto;
 
-const renderGallery = (photos) => {
-  renderPictures(photos);
+const renderBigPhoto = (photos) => {
 
   const photosContainer = document.querySelector('.pictures');
 
@@ -25,4 +23,4 @@ const renderGallery = (photos) => {
   photosContainer.addEventListener('click', onCardsClick);
 };
 
-export { renderGallery };
+export { renderBigPhoto };

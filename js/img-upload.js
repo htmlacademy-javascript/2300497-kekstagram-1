@@ -1,4 +1,6 @@
 import { isEscapeKey } from './keyboard-keys.js';
+import { sendData } from './api.js';
+import { showAlert } from './util.js';
 
 const fileInput = document.querySelector('#upload-file');
 const previewImg = document.querySelector('.default-preview-img');
@@ -15,43 +17,67 @@ const effectsContainer = overlay.querySelector('.effects__list');
 const sliderElement = overlay.querySelector('.effect-level__slider');
 const effectLevel = overlay.querySelector('.img-upload__effect-level');
 const effectLevelValue = overlay.querySelector('.effect-level__value');
+const submitButton = overlay.querySelector('.img-upload__submit');
 
 const SCALE_STEP = 25;
 const MIN_SCALE = 25;
 const MAX_SCALE = 100;
 const MAX_HASHTAGS = 5;
 
-// Функция для закрытия оверлея
-const closeOverlay = function() {
-  overlay.classList.add('hidden');
-  document.body.classList.remove('modal-open');
-  fileInput.value = '';
-  previewImg.src = 'img/upload-default-image.jpg';
-  document.removeEventListener('keydown', onDocumentKeydown);
-  resetEffects();
+const SubmitButtonText = {
+  IDLE: 'Отправить',
+  SENDING: 'Отправляю...'
 };
 
-const onDocumentKeydown = function(evt) {
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.IDLE;
+};
+
+// Функция для сброса эффектов на "Оригинал"
+const resetEffects = function () {
+  imgPreview.className = 'effects__preview--none';
+  imgPreview.style.filter = '';
+  effectLevel.classList.add('hidden');
+  document.querySelector('#effect-none').checked = true;
+};
+
+
+// Функция для закрытия оверлея
+function onDocumentKeydown(evt) {
   if (isEscapeKey(evt)) {
     if (document.activeElement !== hashtagsField && document.activeElement !== descriptionField) {
       evt.preventDefault();
       closeOverlay();
     }
   }
-};
+}
+
+function closeOverlay() {
+  overlay.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+  fileInput.value = '';
+  previewImg.src = 'img/upload-default-image.jpg';
+  document.removeEventListener('keydown', onDocumentKeydown);
+  resetEffects();
+}
 
 // Функция для загрузки файла и установки его в preview
-const fileLoader = function() {
+const fileLoader = function () {
   const file = fileInput.files[0];
   if (file) {
     const reader = new FileReader();
-    reader.onload = function(e) {
+    reader.onload = function (e) {
       previewImg.src = e.target.result;
       overlay.classList.remove('hidden');
       document.body.classList.add('modal-open');
       document.addEventListener('keydown', onDocumentKeydown);
       resetEffects();
-      fileInput.value = '';
     };
     reader.readAsDataURL(file);
   }
@@ -85,8 +111,6 @@ function smallScale() {
 
 scaleBigger.addEventListener('click', bigScale);
 scaleSmaller.addEventListener('click', smallScale);
-
-
 
 //Слайдер (пристин)
 
@@ -176,14 +200,6 @@ sliderElement.noUiSlider.on('update', (values, handle) => {
   }
 });
 
-// Функция для сброса эффектов на "Оригинал"
-const resetEffects = function () {
-  imgPreview.className = 'effects__preview--none';
-  imgPreview.style.filter = '';
-  effectLevel.classList.add('hidden');
-  document.querySelector('#effect-none').checked = true;
-};
-
 // Реализация валидации через Pristine
 const pristine = new Pristine(form, {
   classTo: 'form__item',
@@ -236,11 +252,21 @@ function onDescriptionFieldInput() {
 
 descriptionField.addEventListener('input', onDescriptionFieldInput);
 
-form.addEventListener('submit', (evt) => {
-  const valid = pristine.validate();
-  if (!valid) {
+const setUserFormSubmit = (onSuccess) => {
+  form.addEventListener('submit', (evt) => {
     evt.preventDefault();
-  }
-});
 
-export { fileLoader, fileInput };
+    const valid = pristine.validate();
+    if (valid) {
+      blockSubmitButton();
+      sendData(new FormData(evt.target))
+        .then(onSuccess)
+        .catch((err) => {
+          showAlert(err.message);
+        })
+        .finally(unblockSubmitButton);
+      evt.target.reset();
+    }
+  });
+};
+export { setUserFormSubmit, closeOverlay };

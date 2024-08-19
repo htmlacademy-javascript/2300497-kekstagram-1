@@ -1,4 +1,4 @@
-import { getRandomInteger, getRandomArrayElement } from './util.js';
+/*import { getRandomInteger, getRandomArrayElement } from './util.js';
 
 const NAMES = [
   'Анна', 'Сергей', 'Иван', 'Елена', 'Дмитрий', 'Ольга', 'Максим', 'Алексей', 'Мария', 'Павел', 'Виктор', 'Екатерина', 'Николай', 'Юлия', 'Михаил', 'Игорь'
@@ -46,3 +46,4 @@ const generatePhotos = (count) => Array.from({ length: count }, (_, index) => cr
 const photos = generatePhotos(25);
 
 export { photos };
+*/
