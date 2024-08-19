@@ -1,4 +1,6 @@
 import { isEscapeKey } from './keyboard-keys.js';
+import { sendData } from './api.js';
+import { showAlert } from './util.js';
 
 const fileInput = document.querySelector('#upload-file');
 const previewImg = document.querySelector('.default-preview-img');
@@ -15,11 +17,27 @@ const effectsContainer = overlay.querySelector('.effects__list');
 const sliderElement = overlay.querySelector('.effect-level__slider');
 const effectLevel = overlay.querySelector('.img-upload__effect-level');
 const effectLevelValue = overlay.querySelector('.effect-level__value');
+const submitButton = overlay.querySelector('.img-upload__submit');
 
 const SCALE_STEP = 25;
 const MIN_SCALE = 25;
 const MAX_SCALE = 100;
 const MAX_HASHTAGS = 5;
+
+const SubmitButtonText = {
+  IDLE: 'Отправить',
+  SENDING: 'Отправляю...'
+};
+
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.IDLE;
+};
 
 // Функция для закрытия оверлея
 const closeOverlay = function () {
@@ -241,20 +259,14 @@ const setUserFormSubmit = (onSuccess) => {
 
     const valid = pristine.validate();
     if (valid) {
-      const formData = new FormData(evt.target);
-
-      fetch('https://28.javascript.htmlacademy.pro/kekstagram',
-        {
-          method: 'POST',
-          body: formData,
-        }).then(() => onSuccess()).then(() => evt.target.reset()).catch((err) => {
-          console.log('Error: ', err);
-        });
-      console.log(formData);
-      console.log('good');
-    }
-    else {
-      console.log('bad');
+      blockSubmitButton();
+      sendData(new FormData(evt.target))
+        .then(onSuccess)
+        .catch((err) => {
+          showAlert(err.message);
+        })
+        .finally(unblockSubmitButton);
+      evt.target.reset();
     }
   });
 };
