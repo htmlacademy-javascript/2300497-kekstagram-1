@@ -39,24 +39,33 @@ const unblockSubmitButton = () => {
   submitButton.textContent = SubmitButtonText.IDLE;
 };
 
-// Функция для закрытия оверлея
-const closeOverlay = function () {
-  overlay.classList.add('hidden');
-  document.body.classList.remove('modal-open');
-  fileInput.value = '';
-  previewImg.src = 'img/upload-default-image.jpg';
-  document.removeEventListener('keydown', onDocumentKeydown);
-  resetEffects();
+// Функция для сброса эффектов на "Оригинал"
+const resetEffects = function () {
+  imgPreview.className = 'effects__preview--none';
+  imgPreview.style.filter = '';
+  effectLevel.classList.add('hidden');
+  document.querySelector('#effect-none').checked = true;
 };
 
-const onDocumentKeydown = function (evt) {
+
+// Функция для закрытия оверлея
+function onDocumentKeydown(evt) {
   if (isEscapeKey(evt)) {
     if (document.activeElement !== hashtagsField && document.activeElement !== descriptionField) {
       evt.preventDefault();
       closeOverlay();
     }
   }
-};
+}
+
+function closeOverlay() {
+  overlay.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+  fileInput.value = '';
+  previewImg.src = 'img/upload-default-image.jpg';
+  document.removeEventListener('keydown', onDocumentKeydown);
+  resetEffects();
+}
 
 // Функция для загрузки файла и установки его в preview
 const fileLoader = function () {
@@ -102,8 +111,6 @@ function smallScale() {
 
 scaleBigger.addEventListener('click', bigScale);
 scaleSmaller.addEventListener('click', smallScale);
-
-
 
 //Слайдер (пристин)
 
@@ -192,14 +199,6 @@ sliderElement.noUiSlider.on('update', (values, handle) => {
     imgPreview.style.filter = `${settings.filter}(${value}${settings.unit})`;
   }
 });
-
-// Функция для сброса эффектов на "Оригинал"
-const resetEffects = function () {
-  imgPreview.className = 'effects__preview--none';
-  imgPreview.style.filter = '';
-  effectLevel.classList.add('hidden');
-  document.querySelector('#effect-none').checked = true;
-};
 
 // Реализация валидации через Pristine
 const pristine = new Pristine(form, {
