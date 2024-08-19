@@ -2,7 +2,7 @@ import { openBigPicture } from './big-photo.js';
 let currentPhoto;
 
 const renderBigPhoto = (photos) => {
-  
+
   const photosContainer = document.querySelector('.pictures');
 
   const onCardsClick = (evt) => {
