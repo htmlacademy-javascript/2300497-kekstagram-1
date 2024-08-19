@@ -22,7 +22,7 @@ const MAX_SCALE = 100;
 const MAX_HASHTAGS = 5;
 
 // Функция для закрытия оверлея
-const closeOverlay = function() {
+const closeOverlay = function () {
   overlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   fileInput.value = '';
@@ -31,7 +31,7 @@ const closeOverlay = function() {
   resetEffects();
 };
 
-const onDocumentKeydown = function(evt) {
+const onDocumentKeydown = function (evt) {
   if (isEscapeKey(evt)) {
     if (document.activeElement !== hashtagsField && document.activeElement !== descriptionField) {
       evt.preventDefault();
@@ -41,11 +41,11 @@ const onDocumentKeydown = function(evt) {
 };
 
 // Функция для загрузки файла и установки его в preview
-const fileLoader = function() {
+const fileLoader = function () {
   const file = fileInput.files[0];
   if (file) {
     const reader = new FileReader();
-    reader.onload = function(e) {
+    reader.onload = function (e) {
       previewImg.src = e.target.result;
       overlay.classList.remove('hidden');
       document.body.classList.add('modal-open');
@@ -243,13 +243,13 @@ const setUserFormSubmit = (onSuccess) => {
     if (valid) {
       const formData = new FormData(evt.target);
 
-      fetch ('https://28.javascript.htmlacademy.pro/kekstagram',
-      {
-        method: 'POST',
-        body: formData,
-      }).then(() => onSuccess()).then(() => evt.target.reset()).catch((err) => {
-        console.log('Error: ', err);
-      });
+      fetch('https://28.javascript.htmlacademy.pro/kekstagram',
+        {
+          method: 'POST',
+          body: formData,
+        }).then(() => onSuccess()).then(() => evt.target.reset()).catch((err) => {
+          console.log('Error: ', err);
+        });
       console.log(formData);
       console.log('good');
     }
@@ -258,4 +258,4 @@ const setUserFormSubmit = (onSuccess) => {
     }
   });
 };
-export {setUserFormSubmit, closeOverlay };
+export { setUserFormSubmit, closeOverlay };
