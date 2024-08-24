@@ -1,21 +1,33 @@
+import { openBigPicture } from './big-photo.js';
 
-const picturesList = document.querySelector('.pictures');
-const pictureTemplate = document.querySelector('#picture').content;
+const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
+const picturesContainer = document.querySelector('.pictures');
 
-const renderPicturesList = (photos) => {
-  const pictureListFragment = document.createDocumentFragment();
-  photos.forEach(({ url, comments, likes, id }) => {
-    const pictureElement = pictureTemplate.cloneNode(true);
-    const pictureImg = pictureElement.querySelector('.picture__img');
-    pictureImg.src = url;
-    pictureImg.alt = url;
-    pictureElement.querySelector('.picture__comments').textContent = comments.length;
-    pictureElement.querySelector('.picture__likes').textContent = likes;
-    const pictureContainer = pictureElement.querySelector('.picture');
-    pictureContainer.dataset.id = id;
-    pictureListFragment.appendChild(pictureElement);
-  });
-  picturesList.appendChild(pictureListFragment);
+const clearPictures = () => {
+  const pictures = picturesContainer.querySelectorAll('.picture');
+  pictures.forEach((picture) => picture.remove());
 };
 
-export { renderPicturesList, picturesList };
+const renderPicturesList = (pictures) => {
+  const fragment = document.createDocumentFragment();
+
+  pictures.forEach((picture) => {
+    const pictureElement = pictureTemplate.cloneNode(true);
+    pictureElement.querySelector('.picture__img').src = picture.url;
+    pictureElement.querySelector('.picture__likes').textContent = picture.likes;
+    pictureElement.querySelector('.picture__comments').textContent = picture.comments.length;
+
+
+    pictureElement.addEventListener('click', () => {
+      openBigPicture(picture);
+    });
+
+    fragment.appendChild(pictureElement);
+  });
+
+
+  clearPictures();
+  picturesContainer.appendChild(fragment);
+};
+
+export { renderPicturesList };
