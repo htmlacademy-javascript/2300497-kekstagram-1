@@ -226,6 +226,12 @@ function validateHashTag(value) {
   if (hashtags.length > MAX_HASHTAGS) {
     return false;
   }
+
+  const uniqueHashtags = new Set(hashtags.map((tag) => tag.toLowerCase()));
+  if (uniqueHashtags.size !== hashtags.length) {
+    return false;
+  }
+
   return hashtags.every((tag) => hashtagPattern.test(tag));
 }
 
@@ -257,6 +263,34 @@ function onDescriptionFieldInput() {
 
 descriptionField.addEventListener('input', onDescriptionFieldInput);
 
+
+//форма сообщения
+function showSuccessMessage() {
+  const successTemplate = document.querySelector('#success').content;
+  const successMessage = successTemplate.cloneNode(true);
+  document.body.appendChild(successMessage);
+
+  const successButton = document.querySelector('.success__button');
+  const successBlock = document.querySelector('.success');
+
+  const onDocumentClick = (evt) => {
+    if (!successBlock.contains(evt.target)) {
+      successBlock.remove();
+      document.removeEventListener('click', onDocumentClick);
+      document.removeEventListener('keydown', onDocumentKeydown);
+    }
+  };
+
+  successButton.addEventListener('click', () => {
+    successBlock.remove();
+    document.removeEventListener('click', onDocumentClick);
+    document.removeEventListener('keydown', onDocumentKeydown);
+  });
+
+  document.addEventListener('click', onDocumentClick);
+  document.addEventListener('keydown', onDocumentKeydown);
+}
+
 const setUserFormSubmit = (onSuccess) => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -271,6 +305,7 @@ const setUserFormSubmit = (onSuccess) => {
         })
         .finally(unblockSubmitButton);
       evt.target.reset();
+      showSuccessMessage();
     }
   });
 };
