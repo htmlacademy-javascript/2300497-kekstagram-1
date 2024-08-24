@@ -1,55 +1,39 @@
 import { renderPicturesList } from './template-photos.js';
 
-const getRandomPictures = (photos, count) => {
-  const randomPhotos = [];
-  const photoIds = {};
+let photosData = [];
 
-  while (randomPhotos.length < count) {
-    const randomIndex = Math.floor(Math.random() * photos.length);
-    const randomPhoto = photos[randomIndex];
-
-    if (!photoIds[randomPhoto.id]) {
-      randomPhotos.push(randomPhoto);
-      photoIds[randomPhoto.id] = true;
-    }
-  }
-
-  return randomPhotos;
-};
-
-const filterPictures = (photos, filterType) => {
-  let filteredPhotos = [];
-
+const filterPictures = (filterType) => {
+  let filteredPhotos;
   switch (filterType) {
     case 'default':
-      filteredPhotos = photos.slice(); // копируем оригинальный массив
+      filteredPhotos = photosData.slice();
       break;
-
-    case 'random':
-      filteredPhotos = getRandomPictures(photos, 10);
-      break;
-
     case 'discussed':
-      filteredPhotos = photos.slice().sort((a, b) => b.comments.length - a.comments.length);
+      filteredPhotos = photosData.slice().sort((a, b) => b.comments.length - a.comments.length);
       break;
-
+    case 'random':
+      filteredPhotos = photosData.slice().sort(() => Math.random() - 0.5).slice(0, 10);
+      break;
     default:
-      throw new Error(`Unknown filter type: ${filterType}`);
+      filteredPhotos = photosData.slice();
+      break;
   }
-
   return filteredPhotos;
 };
 
-const picturesContainer = document.querySelector('.pictures');
 const filterButtons = document.querySelectorAll('.img-filters__button');
+
 
 filterButtons.forEach((button) => {
   button.addEventListener('click', () => {
     const filterType = button.dataset.filter;
-    const filteredPhotos = filterPictures(photos, filterType);
-    picturesContainer.innerHTML = '';
+    const filteredPhotos = filterPictures(filterType);
     renderPicturesList(filteredPhotos);
   });
 });
 
-export { filterPictures, getRandomPictures };
+const setPhotoData = (photo) => {
+  photosData = photo;
+};
+
+export { filterPictures, setPhotoData };

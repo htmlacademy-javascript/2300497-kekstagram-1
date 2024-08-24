@@ -1,21 +1,35 @@
+import { openBigPicture } from "./big-photo.js";
 
-const renderPicturesList = (photos) => {
-  const picturesList = document.querySelector('.pictures');
-  const pictureTemplate = document.querySelector('#picture').content;
-  const pictureListFragment = document.createDocumentFragment();
+const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
+const picturesContainer = document.querySelector('.pictures');
 
-  photos.forEach(({ url, comments, likes, id }) => {
+// Функция для рендеринга списка фотографий
+const renderPicturesList = (pictures) => {
+  const fragment = document.createDocumentFragment();
+
+  pictures.forEach((picture) => {
     const pictureElement = pictureTemplate.cloneNode(true);
-    const pictureImg = pictureElement.querySelector('.picture__img');
-    pictureImg.src = url;
-    pictureImg.alt = url;
-    pictureElement.querySelector('.picture__comments').textContent = comments.length;
-    pictureElement.querySelector('.picture__likes').textContent = likes;
-    const pictureContainer = pictureElement.querySelector('.picture');
-    pictureContainer.dataset.id = id;
-    pictureListFragment.appendChild(pictureElement);
+    pictureElement.querySelector('.picture__img').src = picture.url;
+    pictureElement.querySelector('.picture__likes').textContent = picture.likes;
+    pictureElement.querySelector('.picture__comments').textContent = picture.comments.length;
+
+    // Добавляем обработчик клика для открытия большой фотографии
+    pictureElement.addEventListener('click', () => {
+      openBigPicture(picture);
+    });
+
+    fragment.appendChild(pictureElement);
   });
-  picturesList.appendChild(pictureListFragment);
+
+  // Очищаем контейнер перед добавлением новых элементов
+  clearPictures();
+  picturesContainer.appendChild(fragment);
+};
+
+// Функция для очистки только фотографий из контейнера
+const clearPictures = () => {
+  const pictures = picturesContainer.querySelectorAll('.picture');
+  pictures.forEach((picture) => picture.remove());
 };
 
 export { renderPicturesList };

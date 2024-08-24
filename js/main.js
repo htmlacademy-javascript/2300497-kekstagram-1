@@ -3,20 +3,20 @@ import { renderPicturesList } from './template-photos.js';
 import { setUserFormSubmit, closeOverlay } from './img-upload.js';
 import { getData } from './api.js';
 import { showAlert } from './util.js';
-
+import { filterPictures, setPhotoData } from './filters.js';
 
 const imgFiltersElement = document.querySelector('.img-filters');
 
 getData()
   .then((photo) => {
-    renderBigPhoto(photo);
+    setPhotoData(photo);
     renderPicturesList(photo);
-    imgFiltersElement.classList.remove('img-filters--inactive'); // удаляем класс hidden
+    renderBigPhoto(photo);
+    imgFiltersElement.classList.remove('img-filters--inactive');
+    filterPictures('default'); // Убедитесь, что вызываете фильтр по умолчанию
   })
-  .catch(
-    (err) => {
-      showAlert(err.message);
-    }
-  );
+  .catch((err) => {
+    showAlert(err.message);
+  });
 
 setUserFormSubmit(closeOverlay);
