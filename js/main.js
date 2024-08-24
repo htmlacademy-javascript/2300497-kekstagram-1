@@ -13,7 +13,7 @@ getData()
     renderPicturesList(photo);
     renderBigPhoto(photo);
     imgFiltersElement.classList.remove('img-filters--inactive');
-    filterPictures('default'); // Убедитесь, что вызываете фильтр по умолчанию
+    filterPictures('default');
   })
   .catch((err) => {
     showAlert(err.message);
