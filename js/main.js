@@ -10,10 +10,9 @@ const imgFiltersElement = document.querySelector('.img-filters');
 getData()
   .then((photo) => {
     setPhotoData(photo);
-    renderPicturesList(photo);
+    renderPicturesList(filterPictures('filter-default'));
     renderBigPhoto(photo);
     imgFiltersElement.classList.remove('img-filters--inactive');
-    filterPictures('default');
   })
   .catch((err) => {
     showAlert(err.message);

@@ -1,8 +1,12 @@
-import { openBigPicture } from "./big-photo.js";
+import { openBigPicture } from './big-photo.js';
 
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const picturesContainer = document.querySelector('.pictures');
 
+const clearPictures = () => {
+  const pictures = picturesContainer.querySelectorAll('.picture');
+  pictures.forEach((picture) => picture.remove());
+};
 
 const renderPicturesList = (pictures) => {
   const fragment = document.createDocumentFragment();
@@ -24,12 +28,6 @@ const renderPicturesList = (pictures) => {
 
   clearPictures();
   picturesContainer.appendChild(fragment);
-};
-
-
-const clearPictures = () => {
-  const pictures = picturesContainer.querySelectorAll('.picture');
-  pictures.forEach((picture) => picture.remove());
 };
 
 export { renderPicturesList };

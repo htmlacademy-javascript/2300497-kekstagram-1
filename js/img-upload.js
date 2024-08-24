@@ -47,6 +47,10 @@ const resetEffects = function () {
   document.querySelector('#effect-none').checked = true;
 };
 
+const resetSize = function () {
+  scaleValue.value = `${MAX_SCALE}%`;
+  previewImg.style.transform = `scale(${MAX_SCALE}%)`;
+};
 
 // Функция для закрытия оверлея
 function onDocumentKeydown(evt) {
@@ -65,6 +69,7 @@ function closeOverlay() {
   previewImg.src = 'img/upload-default-image.jpg';
   document.removeEventListener('keydown', onDocumentKeydown);
   resetEffects();
+  resetSize();
 }
 
 // Функция для загрузки файла и установки его в preview

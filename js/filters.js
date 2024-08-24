@@ -4,7 +4,7 @@ let photosData = [];
 
 const RANDOM_PHOTOS_COUNT = 10;
 
-
+// Функция устранения дребезга (debounce)
 const debounce = (func, timeout = 500) => {
   let timer;
   return (...args) => {
@@ -19,37 +19,35 @@ const filterPictures = (filterType) => {
   let filteredPhotos = photosData.slice();
 
   switch (filterType) {
-    case 'default':
-
+    case 'filter-default':
+      // По умолчанию ничего не делаем, возвращаем изначальный массив
       break;
-    case 'random':
-
+    case 'filter-random':
+      // Случайные 10 уникальных фотографий
       filteredPhotos = filteredPhotos.sort(() => Math.random() - 0.5).slice(0, RANDOM_PHOTOS_COUNT);
       break;
-    case 'discussed':
-
+    case 'filter-discussed':
+      // Сортировка по количеству комментариев (обсуждаемые)
       filteredPhotos = filteredPhotos.sort((a, b) => b.comments.length - a.comments.length);
       break;
   }
-
+  window.console.log(filterType);
   return filteredPhotos;
 };
 
-const picturesContainer = document.querySelector('.pictures');
 const filterButtons = document.querySelectorAll('.img-filters__button');
 
 // Функция для обработки нажатия на фильтр
 const handleFilterClick = debounce((filterType) => {
   const filteredPhotos = filterPictures(filterType);
-  picturesContainer.innerHTML = '';
-  renderPicturesList(filteredPhotos);
+  renderPicturesList(filteredPhotos); // Отрисовываем новые
 }, 500);
 
 filterButtons.forEach((button) => {
   button.addEventListener('click', (evt) => {
     filterButtons.forEach((btn) => btn.classList.remove('img-filters__button--active'));
     evt.target.classList.add('img-filters__button--active');
-    const filterType = button.dataset.filter;
+    const filterType = button.id;
     handleFilterClick(filterType);
   });
 });
